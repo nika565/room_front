@@ -1,0 +1,33 @@
+*{
+  margin: 0;
+  padding: 0;
+
+}
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  background: linear-gradient(to right, rgb(165, 180, 252), rgb(192, 132, 252));
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  margin: 0;
+}
+
+.gradient-title {
+  background-image: linear-gradient(to right, rgb(107, 33, 168), rgb(76, 29, 149), rgb(107, 33, 168));
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 48px; /* Tamanho do texto */
+  font-weight: bold; /* Peso da fonte */
+  margin: 0 auto;
+  padding: 0;
+  display: inline-block;
+  font-size: 90px;
+}
+

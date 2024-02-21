@@ -1,0 +1,77 @@
+.div-home {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.main-title {
+    background-image: linear-gradient(to right, rgb(107, 33, 168), rgb(76, 29, 149), rgb(107, 33, 168));
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: bold;
+    padding: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+    display: inline-block;
+    font-size: 15vw;
+    text-align: center;
+}
+
+.sub-title {
+    font-size: 3vw;
+    text-align: center;
+}
+
+.p-home {
+    font-size: 2vw;
+    text-align: center;
+    padding: 40px;
+}
+
+.btn {
+    background-color: blueviolet;
+    color: white;
+    width: 15vw;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    transition: transform 100ms ease-in-out;
+    box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.485);
+    font-size: 1.5vw;
+    font-weight: bold;
+    margin-bottom: 10vh;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+}
+
+.btn:active {
+    transform: scale(1)
+}
+
+@media (max-width: 600px) {
+    .main-title {
+        font-size: 30vw;
+    }
+
+    .sub-title {
+        font-size: 6vw;
+    }
+
+    .p-home {
+        font-size: 4vw;
+    }
+
+    .btn {
+        width: 30vw;
+        padding: 15px;
+        font-size: 3vw;
+    }
+}

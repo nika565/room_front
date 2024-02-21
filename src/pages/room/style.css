@@ -1,0 +1,73 @@
+.div-main-room {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.div-chat {
+    background-color: white;
+    width: 70%;
+    height: 55vh;
+    border-radius: 10px 10px 0px 0px;
+    margin-top: 20px;
+    overflow-y: auto;
+    position: relative;
+}
+
+.chat-header{
+    width: 100%;
+    height: 50px;
+    background-color: blueviolet;
+    color: white;
+    border-radius: 10px 0px 0px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+}
+
+.nome-sala{
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.form-message {
+    background-color: red;
+    width: 70%;
+    height: 100px;
+    position: absolute;
+    top: 81%;
+}
+
+/* Estilizando a barra de rolagem */
+::-webkit-scrollbar {
+    width: 10px; /* Largura da barra de rolagem */
+    border-radius: 5px; /* Raio da borda */
+}
+
+/* Estilizando o trilho da barra de rolagem */
+::-webkit-scrollbar-track {
+    background-color: transparent; /* Cor de fundo do trilho */
+    border-radius: 5px; /* Raio da borda */
+}
+
+/* Estilizando o polegar da barra de rolagem */
+::-webkit-scrollbar-thumb {
+    background-color: blueviolet; /* Cor de fundo do polegar */
+    border-radius: 5px; /* Raio da borda */
+}
+
+/* Mudando a cor do polegar ao passar o mouse */
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(95, 8, 176); /* Nova cor de fundo do polegar ao passar o mouse */
+}
+
+.box-red {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    border: solid yellow 2px;
+}
