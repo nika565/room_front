@@ -16,7 +16,6 @@ function Home() {
 
       <Link to='/create-room'><Button title="Inciar" className="btn"/></Link>
 
-      
     </div>
   );
 

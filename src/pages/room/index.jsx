@@ -1,49 +1,122 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
+import './style.css'
 
 export default function Room() {
-    const [mensagem, setMensagem] = useState('');
+
+    // Pegando o nome da sala para usar lógica em cima disso...
     const { sala } = useParams();
+    const nickname = sessionStorage.getItem('nickname');
+
+    // Guardar as mensagens do chat;
+    const [mensagens, setMensagens] = useState(() => {
+        const arrayMsg = sessionStorage.getItem(`${sala}`);
+        return arrayMsg ? JSON.parse(arrayMsg) : [];
+    });
+
+    const [texto, setTexto] = useState('');
     const socket = io('http://localhost:3333');
+
+    // Pegando o id do usuário para idetificar se a mensagem é dele ou não
+    const userId = sessionStorage.getItem('userId');
 
     useEffect(() => {
         console.log('Conectando ao servidor...');
         socket.emit('criarSala', sala);
 
+    }, [])
+
+    // Conexão com a sala criada
+    useEffect(() => {
+
         socket.on('mensagem', (mensagem) => {
-            console.log(`Mensagem: ${mensagem}`)
-            alert(mensagem)
+            console.log('SOCKET:', socket);
+            setMensagens(prev => [...prev, mensagem]);
         });
 
         return () => {
-            console.log('Desconectando...');
-            socket.disconnect();
-        };
-    }, [socket, sala]);
+            socket.off('mensagem');
+        }
 
+
+    }, []);
+
+    useEffect(() => {
+        const jsonMsg = JSON.stringify(mensagens);
+        sessionStorage.setItem(`${sala}`, jsonMsg);
+    }, [mensagens]);
+
+
+    // Pegar o valor digitado da mensagem
     const handleChange = (event) => {
-        setMensagem(event.target.value);
-    }
+        setTexto(event.target.value);
+    };
 
+    // Enviar mensagem
     const handleSubmit = () => {
-        socket.emit('mensagemSala', { mensagem: mensagem, sala: sala });
-    }
+
+        const content = {
+            id: mensagens.length + 1,
+            userId: userId,
+            mensagem: texto,
+            sala: sala,
+            nickname: nickname
+        }
+
+        socket.emit('mensagemSala', content);
+    };
 
     return (
         <div className="div-main-room">
-            <h1>Olá mundo! Aqui é a sala: {sala}</h1>
+
+            <aside className='aside'>
+
+            </aside>
+
+
 
             <div className="div-chat">
-                <header className="chat-header">
-                    <p className="nome-sala">{sala}</p>
-                </header>
+
+                <main className='chat-main'>
+
+                    <header className="chat-header">
+                        <p className="nome-sala">{sala}</p>
+                    </header>
+
+                    <div className='div-messages'>
+                        {/* Exibição das mensagens */}
+                        {mensagens.length > 0 ? mensagens.map(item => {
+                            if (item.userId === userId) {
+                                return (
+                                    <div className='div-my-msg' key={item.id}>
+                                        {console.log(item)}
+                                        <p>{item.nickname}</p>
+                                        <p>{item.mensagem}</p>
+                                    </div>
+                                );
+                            } else {
+                                return (
+                                    <div className='div-msg' key={item.id}>
+                                        <p>{item.nickname}</p>
+                                        <p>{item.mensagem}</p>
+                                    </div>
+                                );
+                            }
+                        }) : 'Não tem mensagens meu parceiro...'}
+                    </div>
+
+                    <form className="form-message">
+                        <div>
+                            <input className='input' type="text" value={texto} onChange={handleChange} placeholder='Digite aqui a sua mensagem...' autoFocus />
+                            <button className='btn' type="button" onClick={handleSubmit}>Enviar</button>
+                        </div>
+                    </form>
+
+                </main>
+
             </div>
 
-            <form className="form-message">
-                <input type="text" value={mensagem} onChange={handleChange} />
-                <button type="button" onClick={handleSubmit}>Enviar</button>
-            </form>
         </div>
     );
 }
