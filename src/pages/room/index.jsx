@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
+import { useNavigate } from 'react-router-dom';
+
 import './style.css'
 
 export default function Room() {
+
+    const navigate = useNavigate();
 
     // Pegando o nome da sala para usar lógica em cima disso...
     const { sala } = useParams();
@@ -14,6 +18,14 @@ export default function Room() {
         const arrayMsg = sessionStorage.getItem(`${sala}`);
         return arrayMsg ? JSON.parse(arrayMsg) : [];
     });
+
+    // Alterar as cores quando clica na sala
+    const [indiceAtivo, setIndiceAtivo] = useState(0);
+
+    const [rooms, setRooms] = useState(() => {
+        const arrayRooms = sessionStorage.getItem('rooms');
+        return arrayRooms ? JSON.parse(arrayRooms) : [];
+    })
 
     const [texto, setTexto] = useState('');
     const socket = io('http://localhost:3333');
@@ -53,8 +65,19 @@ export default function Room() {
         setTexto(event.target.value);
     };
 
+    const alternarClasse = (index) => {
+        setIndiceAtivo(index === indiceAtivo ? null : index)
+        mudarSala(index)
+    }
+
+    const mudarSala = (index) => {
+        navigate(`/room/${rooms[index]}`)
+    }
+
     // Enviar mensagem
-    const handleSubmit = () => {
+    const handleSubmit = (event) => {
+
+        event.preventDefault();
 
         const content = {
             id: mensagens.length + 1,
@@ -71,6 +94,21 @@ export default function Room() {
         <div className="div-main-room">
 
             <aside className='aside'>
+
+                {
+                    rooms.length > 0 ? rooms.map((item, index) => {
+
+                        return(
+                            <div className={`div-rooms ${indiceAtivo === index ? 'room-selected' : ''}`} onClick={() => alternarClasse(index)} key={index}>
+                                {item}
+                            </div>
+                        );
+                    })
+
+                    : 
+
+                    <p>Sem salas...</p>
+                }
 
             </aside>
 
@@ -91,25 +129,25 @@ export default function Room() {
                                 return (
                                     <div className='div-my-msg' key={item.id}>
                                         {console.log(item)}
-                                        <p>{item.nickname}</p>
-                                        <p>{item.mensagem}</p>
+                                        <p className="nickname-label">Você</p>
+                                        <p className="p-message">{item.mensagem}</p>
                                     </div>
                                 );
                             } else {
                                 return (
                                     <div className='div-msg' key={item.id}>
-                                        <p>{item.nickname}</p>
-                                        <p>{item.mensagem}</p>
+                                        <p className="nickname-label">{item.nickname}</p>
+                                        <p className="p-message">{item.mensagem}</p>
                                     </div>
                                 );
                             }
-                        }) : 'Não tem mensagens meu parceiro...'}
+                        }) : <h1 className='no-messages'>Inicie uma conversa!</h1>}
                     </div>
 
                     <form className="form-message">
                         <div>
                             <input className='input' type="text" value={texto} onChange={handleChange} placeholder='Digite aqui a sua mensagem...' autoFocus />
-                            <button className='btn' type="button" onClick={handleSubmit}>Enviar</button>
+                            <button className='btn' type="submit" onClick={handleSubmit}>Enviar</button>
                         </div>
                     </form>
 

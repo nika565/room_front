@@ -51,6 +51,8 @@
 .div-messages {
     width: 100%;
     height: 80vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-message {
@@ -76,6 +78,98 @@
 
 .div-my-msg {
     align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 20px;
+    word-wrap: break-word;
+}
+
+.div-msg {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 20px;
+    word-wrap: break-word;
+}
+
+.div-msg > .nickname-label {
+    align-self: flex-start;
+    text-shadow:
+        0 0 20px rgb(131, 7, 255),
+        0 0 30px rgb(131, 7, 255),
+        0 0 60px rgb(131, 7, 255),
+        0 0 90px rgb(131, 7, 255), 
+        0 0 150px rgb(131, 7, 255); 
+}
+
+.div-msg > .p-message {
+    background-color: rgb(55, 0, 111);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 150px;
+    
+}
+
+.nickname-label {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    align-self: flex-end;
+    text-shadow:
+        0 0 20px rgb(131, 7, 255),
+        0 0 30px rgb(131, 7, 255),
+        0 0 60px rgb(131, 7, 255),
+        0 0 90px rgb(131, 7, 255), 
+        0 0 150px rgb(131, 7, 255); 
+}
+
+.p-message {
+    color: white;
+    background-color: rgba(129, 2, 255, 0.989);
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 150px;
+    text-shadow:
+        0 0 20px rgb(131, 7, 255),
+        0 0 30px rgb(131, 7, 255),
+        0 0 60px rgb(131, 7, 255),
+        0 0 90px rgb(131, 7, 255), 
+        0 0 150px rgb(131, 7, 255); 
+    
+}
+
+.no-messages {
+    text-align: center;
+    padding: 20px;
+    background-color: rgb(131, 7, 255);
+
+}
+
+.div-rooms {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: white;
+    border-bottom: 3px solid rgb(131, 7, 255);
+    border-top: 3px solid rgb(131, 7, 255);
+    text-shadow:
+        0 0 20px rgb(131, 7, 255),
+        0 0 30px rgb(131, 7, 255),
+        0 0 60px rgb(131, 7, 255),
+        0 0 90px rgb(131, 7, 255), 
+        0 0 150px rgb(131, 7, 255); 
+}
+
+.room-selected {
+    background-color: rgb(131, 7, 255);
+    color: black;
 }
 
 .btn:hover {
