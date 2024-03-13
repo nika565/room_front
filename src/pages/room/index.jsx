@@ -11,7 +11,8 @@ export default function Room() {
 
     // Pegando o nome da sala para usar lógica em cima disso...
     const { sala } = useParams();
-    const nickname = sessionStorage.getItem('nickname');
+    const [stateRoom, setStateRoom] = useState(sala);
+    const nickname = localStorage.getItem('nickname');
 
     // Guardar as mensagens do chat;
     const [mensagens, setMensagens] = useState(() => {
@@ -31,13 +32,22 @@ export default function Room() {
     const socket = io('http://localhost:3333');
 
     // Pegando o id do usuário para idetificar se a mensagem é dele ou não
-    const userId = sessionStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
 
     useEffect(() => {
         console.log('Conectando ao servidor...');
         socket.emit('criarSala', sala);
 
     }, [])
+
+    useEffect(() => {
+
+        setMensagens(() => {
+            const arrayMsg = sessionStorage.getItem(`${sala}`);
+            return arrayMsg ? JSON.parse(arrayMsg) : [];
+        })
+
+    }, [stateRoom]);
 
     // Conexão com a sala criada
     useEffect(() => {
@@ -68,6 +78,7 @@ export default function Room() {
     const alternarClasse = (index) => {
         setIndiceAtivo(index === indiceAtivo ? null : index)
         mudarSala(index)
+        setStateRoom(rooms[index]);
     }
 
     const mudarSala = (index) => {
@@ -83,7 +94,7 @@ export default function Room() {
             id: mensagens.length + 1,
             userId: userId,
             mensagem: texto,
-            sala: sala,
+            sala: stateRoom,
             nickname: nickname
         }
 
@@ -98,16 +109,16 @@ export default function Room() {
                 {
                     rooms.length > 0 ? rooms.map((item, index) => {
 
-                        return(
+                        return (
                             <div className={`div-rooms ${indiceAtivo === index ? 'room-selected' : ''}`} onClick={() => alternarClasse(index)} key={index}>
                                 {item}
                             </div>
                         );
                     })
 
-                    : 
+                        :
 
-                    <p>Sem salas...</p>
+                        <p>Sem salas...</p>
                 }
 
             </aside>
@@ -119,7 +130,7 @@ export default function Room() {
                 <main className='chat-main'>
 
                     <header className="chat-header">
-                        <p className="nome-sala">{sala}</p>
+                        <p className="nome-sala">{stateRoom}</p>
                     </header>
 
                     <div className='div-messages'>
