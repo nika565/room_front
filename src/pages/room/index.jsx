@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import idGenerator from '../../utils/idGenerator';
 
 import './style.css'
 
@@ -9,10 +10,13 @@ export default function Room() {
 
     const navigate = useNavigate();
 
+    const socket = io('http://localhost:3333');
+
     // Pegando o nome da sala para usar lógica em cima disso...
     const { sala } = useParams();
     const [stateRoom, setStateRoom] = useState(sala);
     const nickname = localStorage.getItem('nickname');
+
 
     // Guardar as mensagens do chat;
     const [mensagens, setMensagens] = useState(() => {
@@ -29,16 +33,14 @@ export default function Room() {
     })
 
     const [texto, setTexto] = useState('');
-    const socket = io('http://localhost:3333');
 
     // Pegando o id do usuário para idetificar se a mensagem é dele ou não
     const userId = localStorage.getItem('userId');
 
     useEffect(() => {
         console.log('Conectando ao servidor...');
-        socket.emit('criarSala', sala);
-
-    }, [])
+        socket.emit('criarSala', stateRoom);
+    }, [stateRoom])
 
     useEffect(() => {
 
@@ -61,8 +63,7 @@ export default function Room() {
             socket.off('mensagem');
         }
 
-
-    }, []);
+    }, [stateRoom]);
 
     useEffect(() => {
         const jsonMsg = JSON.stringify(mensagens);
@@ -77,8 +78,8 @@ export default function Room() {
 
     const alternarClasse = (index) => {
         setIndiceAtivo(index === indiceAtivo ? null : index)
-        mudarSala(index)
         setStateRoom(rooms[index]);
+        mudarSala(index);
     }
 
     const mudarSala = (index) => {
@@ -86,17 +87,21 @@ export default function Room() {
     }
 
     // Enviar mensagem
-    const handleSubmit = (event) => {
+    const handleSubmit = (evento) => {
 
-        event.preventDefault();
+        evento.preventDefault();
+
+        console.log('teste')
 
         const content = {
-            id: mensagens.length + 1,
+            id: idGenerator(),
             userId: userId,
             mensagem: texto,
             sala: stateRoom,
             nickname: nickname
         }
+
+        setTexto('');
 
         socket.emit('mensagemSala', content);
     };
@@ -106,12 +111,21 @@ export default function Room() {
 
             <aside className='aside'>
 
+                {/* Cabeçalho de opções */}
+                <header className='header-aside'>
+                    <h1 className='h1-aside'>Minhas salas</h1>
+
+                    <Link to={'/create-room'}><button title='Criar Sala' >+</button></Link>
+
+                </header>
+
                 {
+                    // Exibição das salas do usuário
                     rooms.length > 0 ? rooms.map((item, index) => {
 
                         return (
                             <div className={`div-rooms ${indiceAtivo === index ? 'room-selected' : ''}`} onClick={() => alternarClasse(index)} key={index}>
-                                {item}
+                                &nbsp;&nbsp;&nbsp;&nbsp;{item}
                             </div>
                         );
                     })
@@ -121,9 +135,10 @@ export default function Room() {
                         <p>Sem salas...</p>
                 }
 
+
+
+
             </aside>
-
-
 
             <div className="div-chat">
 
@@ -153,12 +168,13 @@ export default function Room() {
                                 );
                             }
                         }) : <h1 className='no-messages'>Inicie uma conversa!</h1>}
+
                     </div>
 
-                    <form className="form-message">
+                    <form className="form-message" onSubmit={handleSubmit}>
                         <div>
                             <input className='input' type="text" value={texto} onChange={handleChange} placeholder='Digite aqui a sua mensagem...' autoFocus />
-                            <button className='btn' type="submit" onClick={handleSubmit}>Enviar</button>
+                            <button className='btn' type="submit" title='Enviar mensagem'>Enviar</button>
                         </div>
                     </form>
 

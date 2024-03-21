@@ -4,13 +4,6 @@
     display: flex;
 }
 
-.aside {
-    background-color: rgba(0, 0, 0, 0.356);
-    width: 30%;
-    height: 100vh !important;
-    border-right: 3px solid rgb(131, 7, 255);
-}
-
 .div-chat {
     width: 100%;
     height: 100vh;
@@ -32,6 +25,7 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .nome-sala{
@@ -50,17 +44,22 @@
 
 .div-messages {
     width: 100%;
-    height: 80vh;
+    height: 70vh;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+
 }
 
 .form-message {
-    width: 100%;
+    background-color: black;
+    width: 76%;
     height: 15%;
     display: flex;
     align-items: center;
     justify-content: space-around;
+    position: fixed;
+    top: 85%;
 }
 
 .form-message div {
@@ -166,6 +165,59 @@
         0 0 90px rgb(131, 7, 255), 
         0 0 150px rgb(131, 7, 255); 
 }
+
+.aside {
+    background-color: rgba(0, 0, 0, 0.356);
+    width: 30%;
+    height: 100vh !important;
+    border-right: 3px solid rgb(131, 7, 255);
+    height: 100vh;
+    overflow-y: auto;
+}
+
+
+.header-aside {
+    background-color: black;
+    width: 100%;
+    height: 90px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    border-bottom: solid 3px rgb(131, 7, 255);
+}
+
+.h1-aside {
+    font-weight: bold;
+    font-size: 22px;
+    color: white;
+    text-shadow:
+        0 0 10px rgb(131, 7, 255),
+        0 0 20px rgb(131, 7, 255),
+        0 0 40px rgb(131, 7, 255),
+        0 0 80px rgb(131, 7, 255), 
+        0 0 120px rgb(131, 7, 255); 
+}
+
+.header-aside button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: white;
+    background-color: rgb(131, 7, 255);
+    font-weight: bold;
+    font-size: 26px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0px 0px 10px 5px rgba(131, 7, 255, 0.552);
+    
+}
+
+  .header-aside button:active {
+    background-color: white;
+    color: blueviolet;
+  }
 
 .room-selected {
     background-color: rgb(131, 7, 255);
