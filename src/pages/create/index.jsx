@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import './style.css'
 import createRoom from '../../utils/createRoom';
 
@@ -8,10 +8,12 @@ export default function CreateRoom() {
 
   const navigate = useNavigate();
 
+  const [nomeSala] = useSearchParams();
+
   const nick = localStorage.getItem('nickname');
 
   const [nickname, setNickname] = useState(() => nick ? nick : '');
-  const [nameRoom, setNameRoom] = useState('');
+  const [nameRoom, setNameRoom] = useState(() => nomeSala ? nomeSala.get('nomeSala') : '');
 
   // Pegando a mensagem digitada
   const handleChangeName = (event) => {
@@ -39,12 +41,12 @@ export default function CreateRoom() {
 
       <form className='form-create' onSubmit={handleSubmit}>
 
-        {!nick ? <input className='input' type="text" onChange={handleChangeName} placeholder='Seu apelido...' required/>
+        {!nick ? <input className='input' type="text" onChange={handleChangeName} placeholder='Seu apelido...' required autoFocus/>
 
           : ''
         }
 
-        <input className='input' type="text" onChange={handleChangeRoom} placeholder='Nome da sala...' required />
+        <input className='input' type="text" onChange={handleChangeRoom} value={nameRoom} placeholder='Nome da sala...' required autoFocus />
         <button className='btn' type="submit">Criar Sala</button>
       </form>
 

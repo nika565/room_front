@@ -3,54 +3,59 @@ import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
 import { Link, useNavigate } from 'react-router-dom';
 import idGenerator from '../../utils/idGenerator';
+import verificacaoSala from '../../utils/verificacaoSala';
 
 import './style.css'
 
 export default function Room() {
 
+    
+    // Navegação de salas
     const navigate = useNavigate();
-
+    
     const socket = io('http://localhost:3333');
 
     // Pegando o nome da sala para usar lógica em cima disso...
     const { sala } = useParams();
     const [stateRoom, setStateRoom] = useState(sala);
     const nickname = localStorage.getItem('nickname');
-
-
+    
+    
     // Guardar as mensagens do chat;
     const [mensagens, setMensagens] = useState(() => {
         const arrayMsg = sessionStorage.getItem(`${sala}`);
         return arrayMsg ? JSON.parse(arrayMsg) : [];
     });
-
+    
     // Alterar as cores quando clica na sala
     const [indiceAtivo, setIndiceAtivo] = useState(0);
-
+    
     const [rooms, setRooms] = useState(() => {
         const arrayRooms = sessionStorage.getItem('rooms');
         return arrayRooms ? JSON.parse(arrayRooms) : [];
     })
-
+    
+    verificacaoSala(sala, rooms);
+    
     const [texto, setTexto] = useState('');
-
+    
     // Pegando o id do usuário para idetificar se a mensagem é dele ou não
     const userId = localStorage.getItem('userId');
-
+    
     useEffect(() => {
         console.log('Conectando ao servidor...');
         socket.emit('criarSala', stateRoom);
     }, [stateRoom])
 
     useEffect(() => {
-
+        
         setMensagens(() => {
             const arrayMsg = sessionStorage.getItem(`${sala}`);
             return arrayMsg ? JSON.parse(arrayMsg) : [];
         })
-
+        
     }, [stateRoom]);
-
+    
     // Conexão com a sala criada
     useEffect(() => {
 
@@ -58,41 +63,51 @@ export default function Room() {
             console.log('SOCKET:', socket);
             setMensagens(prev => [...prev, mensagem]);
         });
-
+        
         return () => {
             socket.off('mensagem');
         }
-
+        
     }, [stateRoom]);
-
+    
     useEffect(() => {
         const jsonMsg = JSON.stringify(mensagens);
         sessionStorage.setItem(`${sala}`, jsonMsg);
     }, [mensagens]);
-
-
+    
+    const mensagensRef = useRef(null);
+    
+    const scrollDown = () => {
+        mensagensRef.current.scrollTop = mensagensRef.current.scrollHeight;
+    }
+    
+    useEffect(() => {
+        scrollDown();
+    }, [mensagens])
+    
+    
     // Pegar o valor digitado da mensagem
     const handleChange = (event) => {
         setTexto(event.target.value);
     };
-
+    
     const alternarClasse = (index) => {
         setIndiceAtivo(index === indiceAtivo ? null : index)
         setStateRoom(rooms[index]);
         mudarSala(index);
     }
-
+    
     const mudarSala = (index) => {
         navigate(`/room/${rooms[index]}`)
     }
-
+    
     // Enviar mensagem
     const handleSubmit = (evento) => {
-
+        
         evento.preventDefault();
-
-        console.log('teste')
-
+        
+        if (!texto) return;
+        
         const content = {
             id: idGenerator(),
             userId: userId,
@@ -100,12 +115,31 @@ export default function Room() {
             sala: stateRoom,
             nickname: nickname
         }
-
+        
         setTexto('');
-
+        
         socket.emit('mensagemSala', content);
     };
-
+    
+    const sairSala = (nomeSala, salas) => {
+        
+        sessionStorage.removeItem(nomeSala);
+        
+        const arraySalas = salas.filter(elemento => elemento !== nomeSala);
+        
+        sessionStorage.setItem('rooms', JSON.stringify(arraySalas));
+        
+        if (arraySalas.length === 0) {
+            navigate('/create-room');
+            return;
+        }
+        
+        setStateRoom(arraySalas[0]);       
+        setRooms(arraySalas);
+        navigate(`/room/${arraySalas[0]}`);
+        
+    }
+    
     return (
         <div className="div-main-room">
 
@@ -136,8 +170,6 @@ export default function Room() {
                 }
 
 
-
-
             </aside>
 
             <div className="div-chat">
@@ -146,9 +178,10 @@ export default function Room() {
 
                     <header className="chat-header">
                         <p className="nome-sala">{stateRoom}</p>
+                        <button className='btn-exit' onClick={() => sairSala(stateRoom, rooms)}>Sair</button>
                     </header>
 
-                    <div className='div-messages'>
+                    <div className='div-messages' ref={mensagensRef}>
                         {/* Exibição das mensagens */}
                         {mensagens.length > 0 ? mensagens.map(item => {
                             if (item.userId === userId) {

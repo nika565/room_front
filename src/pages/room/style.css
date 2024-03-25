@@ -12,12 +12,29 @@
 .chat-header {
     background-color: rgb(70, 3, 133);
     width: 100%;
-    height: 100px;
+    height: 90px;
     display: flex;
-    flex-direction: column;
-    align-items: space-around;
-    justify-content: center;
-    border-bottom: solid 3px rgb(131, 7, 255);
+    flex-direction: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: solid 5px rgb(131, 7, 255);
+}
+
+.btn-exit {
+    margin-right: 25px;
+    cursor: pointer;
+    text-shadow:
+        0 0 10px rgb(131, 7, 255),
+        0 0 20px rgb(131, 7, 255),
+        0 0 40px rgb(131, 7, 255),
+        0 0 80px rgb(131, 7, 255), 
+        0 0 120px rgb(131, 7, 255);
+        background-color: transparent;
+        color: white;
+        border: none;
+        outline: none;
+        font-size: 22px;
+        font-weight: bold;
 }
 
 .chat-main {
@@ -47,13 +64,14 @@
     height: 70vh;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    scroll-behavior: smooth; /* Adiciona uma transição suave */
+    overflow-y: auto; /* Habilita a barra de rolagem vertical */
 
 }
 
 .form-message {
     background-color: black;
-    width: 76%;
+    width: 77%;
     height: 15%;
     display: flex;
     align-items: center;
@@ -129,7 +147,7 @@
 .p-message {
     color: white;
     background-color: rgba(129, 2, 255, 0.989);
-    text-align: center;
+    text-align: start;
     padding: 10px;
     border-radius: 10px;
     max-width: 150px;
@@ -222,6 +240,7 @@
 .room-selected {
     background-color: rgb(131, 7, 255);
     color: black;
+    pointer-events: none;
 }
 
 .btn:hover {
@@ -234,7 +253,7 @@
 
 /* Estilizando a barra de rolagem */
 ::-webkit-scrollbar {
-    width: 10px; /* Largura da barra de rolagem */
+    width: 7px; /* Largura da barra de rolagem */
     border-radius: 5px; /* Raio da borda */
 }
 
