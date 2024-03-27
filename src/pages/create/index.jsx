@@ -13,7 +13,7 @@ export default function CreateRoom() {
   const nick = localStorage.getItem('nickname');
 
   const [nickname, setNickname] = useState(() => nick ? nick : '');
-  const [nameRoom, setNameRoom] = useState(() => nomeSala ? nomeSala.get('nomeSala') : '');
+  const [nameRoom, setNameRoom] = useState(() => nomeSala.get('nomeSala') ? nomeSala.get('nomeSala') : '');
 
   // Pegando a mensagem digitada
   const handleChangeName = (event) => {

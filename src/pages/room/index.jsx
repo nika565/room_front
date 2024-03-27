@@ -1,176 +1,69 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
-import { Link, useNavigate } from 'react-router-dom';
-import idGenerator from '../../utils/idGenerator';
+import { useNavigate } from 'react-router-dom';
+
+// Componentes funcionais
+import RoomList from '../../components/RoomList';
+import FormChat from '../../components/FormChat';
+import MessageViewer from '../../components/MessageViewer';
+
+// Lógica funcional
 import verificacaoSala from '../../utils/verificacaoSala';
+import sairSala from '../../utils/sairSala';
 
 import './style.css'
 
 export default function Room() {
 
-    
     // Navegação de salas
     const navigate = useNavigate();
-    
+
     const socket = io('http://localhost:3333');
+
+    const mensagensRef = useRef(null);
 
     // Pegando o nome da sala para usar lógica em cima disso...
     const { sala } = useParams();
     const [stateRoom, setStateRoom] = useState(sala);
-    const nickname = localStorage.getItem('nickname');
-    
     
     // Guardar as mensagens do chat;
     const [mensagens, setMensagens] = useState(() => {
         const arrayMsg = sessionStorage.getItem(`${sala}`);
         return arrayMsg ? JSON.parse(arrayMsg) : [];
     });
-    
-    // Alterar as cores quando clica na sala
-    const [indiceAtivo, setIndiceAtivo] = useState(0);
-    
+
     const [rooms, setRooms] = useState(() => {
         const arrayRooms = sessionStorage.getItem('rooms');
         return arrayRooms ? JSON.parse(arrayRooms) : [];
-    })
-    
+    });
+
+    // Verificação se a sala existe no armazenamento do navegador
     verificacaoSala(sala, rooms);
-    
-    const [texto, setTexto] = useState('');
-    
-    // Pegando o id do usuário para idetificar se a mensagem é dele ou não
-    const userId = localStorage.getItem('userId');
-    
-    useEffect(() => {
-        console.log('Conectando ao servidor...');
-        socket.emit('criarSala', stateRoom);
-    }, [stateRoom])
 
     useEffect(() => {
-        
+        socket.emit('criarSala', stateRoom);
+
         setMensagens(() => {
             const arrayMsg = sessionStorage.getItem(`${sala}`);
             return arrayMsg ? JSON.parse(arrayMsg) : [];
-        })
-        
-    }, [stateRoom]);
-    
-    // Conexão com a sala criada
-    useEffect(() => {
+        });
 
         socket.on('mensagem', (mensagem) => {
-            console.log('SOCKET:', socket);
             setMensagens(prev => [...prev, mensagem]);
         });
-        
+
         return () => {
             socket.off('mensagem');
+            socket.off(stateRoom);
         }
-        
+
     }, [stateRoom]);
-    
-    useEffect(() => {
-        const jsonMsg = JSON.stringify(mensagens);
-        sessionStorage.setItem(`${sala}`, jsonMsg);
-    }, [mensagens]);
-    
-    const mensagensRef = useRef(null);
-    
-    const scrollDown = () => {
-        mensagensRef.current.scrollTop = mensagensRef.current.scrollHeight;
-    }
-    
-    useEffect(() => {
-        scrollDown();
-    }, [mensagens])
-    
-    
-    // Pegar o valor digitado da mensagem
-    const handleChange = (event) => {
-        setTexto(event.target.value);
-    };
-    
-    const alternarClasse = (index) => {
-        setIndiceAtivo(index === indiceAtivo ? null : index)
-        setStateRoom(rooms[index]);
-        mudarSala(index);
-    }
-    
-    const mudarSala = (index) => {
-        navigate(`/room/${rooms[index]}`)
-    }
-    
-    // Enviar mensagem
-    const handleSubmit = (evento) => {
-        
-        evento.preventDefault();
-        
-        if (!texto) return;
-        
-        const content = {
-            id: idGenerator(),
-            userId: userId,
-            mensagem: texto,
-            sala: stateRoom,
-            nickname: nickname
-        }
-        
-        setTexto('');
-        
-        socket.emit('mensagemSala', content);
-    };
-    
-    const sairSala = (nomeSala, salas) => {
-        
-        sessionStorage.removeItem(nomeSala);
-        
-        const arraySalas = salas.filter(elemento => elemento !== nomeSala);
-        
-        sessionStorage.setItem('rooms', JSON.stringify(arraySalas));
-        
-        if (arraySalas.length === 0) {
-            navigate('/create-room');
-            return;
-        }
-        
-        setStateRoom(arraySalas[0]);       
-        setRooms(arraySalas);
-        navigate(`/room/${arraySalas[0]}`);
-        
-    }
-    
+
     return (
         <div className="div-main-room">
 
-            <aside className='aside'>
-
-                {/* Cabeçalho de opções */}
-                <header className='header-aside'>
-                    <h1 className='h1-aside'>Minhas salas</h1>
-
-                    <Link to={'/create-room'}><button title='Criar Sala' >+</button></Link>
-
-                </header>
-
-                {
-                    // Exibição das salas do usuário
-                    rooms.length > 0 ? rooms.map((item, index) => {
-
-                        return (
-                            <div className={`div-rooms ${indiceAtivo === index ? 'room-selected' : ''}`} onClick={() => alternarClasse(index)} key={index}>
-                                &nbsp;&nbsp;&nbsp;&nbsp;{item}
-                            </div>
-                        );
-                    })
-
-                        :
-
-                        <p>Sem salas...</p>
-                }
-
-
-            </aside>
+            <RoomList rooms={rooms} setStateRoom={setStateRoom} />
 
             <div className="div-chat">
 
@@ -178,38 +71,12 @@ export default function Room() {
 
                     <header className="chat-header">
                         <p className="nome-sala">{stateRoom}</p>
-                        <button className='btn-exit' onClick={() => sairSala(stateRoom, rooms)}>Sair</button>
+                        <button className='btn-exit' onClick={() => sairSala(stateRoom, rooms, navigate, setStateRoom, setRooms)}>Sair</button>
                     </header>
 
-                    <div className='div-messages' ref={mensagensRef}>
-                        {/* Exibição das mensagens */}
-                        {mensagens.length > 0 ? mensagens.map(item => {
-                            if (item.userId === userId) {
-                                return (
-                                    <div className='div-my-msg' key={item.id}>
-                                        {console.log(item)}
-                                        <p className="nickname-label">Você</p>
-                                        <p className="p-message">{item.mensagem}</p>
-                                    </div>
-                                );
-                            } else {
-                                return (
-                                    <div className='div-msg' key={item.id}>
-                                        <p className="nickname-label">{item.nickname}</p>
-                                        <p className="p-message">{item.mensagem}</p>
-                                    </div>
-                                );
-                            }
-                        }) : <h1 className='no-messages'>Inicie uma conversa!</h1>}
+                    <MessageViewer mensagensRef={mensagensRef} mensagens={mensagens} sala={sala} />
 
-                    </div>
-
-                    <form className="form-message" onSubmit={handleSubmit}>
-                        <div>
-                            <input className='input' type="text" value={texto} onChange={handleChange} placeholder='Digite aqui a sua mensagem...' autoFocus />
-                            <button className='btn' type="submit" title='Enviar mensagem'>Enviar</button>
-                        </div>
-                    </form>
+                    <FormChat stateRoom={stateRoom} socket={socket}  />
 
                 </main>
 
