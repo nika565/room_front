@@ -26,7 +26,7 @@ export default function Room() {
     // Pegando o nome da sala para usar lógica em cima disso...
     const { sala } = useParams();
     const [stateRoom, setStateRoom] = useState(sala);
-    
+
     // Guardar as mensagens do chat;
     const [mensagens, setMensagens] = useState(() => {
         const arrayMsg = sessionStorage.getItem(`${sala}`);
@@ -37,6 +37,8 @@ export default function Room() {
         const arrayRooms = sessionStorage.getItem('rooms');
         return arrayRooms ? JSON.parse(arrayRooms) : [];
     });
+
+    const [open, setOpen] = useState(false);
 
     // Verificação se a sala existe no armazenamento do navegador
     verificacaoSala(sala, rooms);
@@ -63,20 +65,27 @@ export default function Room() {
     return (
         <div className="div-main-room">
 
-            <RoomList rooms={rooms} setStateRoom={setStateRoom} />
+            <RoomList rooms={rooms} setStateRoom={setStateRoom} open={open} setOpen={setOpen} />
 
             <div className="div-chat">
 
                 <main className='chat-main'>
 
                     <header className="chat-header">
-                        <p className="nome-sala">{stateRoom}</p>
-                        <button className='btn-exit' onClick={() => sairSala(stateRoom, rooms, navigate, setStateRoom, setRooms)}>Sair</button>
+
+                        <div>
+                            <p className="nome-sala">{stateRoom}</p>
+                        </div>
+
+                        <div className='div-options'>
+                            <p className='ver-salas' onClick={() => setOpen(true)}>Ver salas</p>
+                            <button className='btn-exit' onClick={() => sairSala(stateRoom, rooms, navigate, setStateRoom, setRooms)}>Sair</button>
+                        </div>
                     </header>
 
                     <MessageViewer mensagensRef={mensagensRef} mensagens={mensagens} sala={sala} />
 
-                    <FormChat stateRoom={stateRoom} socket={socket}  />
+                    <FormChat stateRoom={stateRoom} socket={socket} />
 
                 </main>
 

@@ -17,7 +17,14 @@
     flex-direction: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 50px;
     border-bottom: solid 5px rgb(131, 7, 255);
+}
+
+.div-options {
+    margin-right: 20px;
+    display: flex;
+    gap: 50px;
 }
 
 .btn-exit {
@@ -27,14 +34,14 @@
         0 0 10px rgb(131, 7, 255),
         0 0 20px rgb(131, 7, 255),
         0 0 40px rgb(131, 7, 255),
-        0 0 80px rgb(131, 7, 255), 
+        0 0 80px rgb(131, 7, 255),
         0 0 120px rgb(131, 7, 255);
-        background-color: transparent;
-        color: white;
-        border: none;
-        outline: none;
-        font-size: 22px;
-        font-weight: bold;
+    background-color: transparent;
+    color: white;
+    border: none;
+    outline: none;
+    font-size: 22px;
+    font-weight: bold;
 }
 
 .chat-main {
@@ -45,18 +52,31 @@
     position: relative;
 }
 
-.nome-sala{
+.nome-sala {
+    margin-left: 20px;
     font-weight: bold;
     font-size: 22px;
-    margin-bottom: 10px;
-    margin-left: 20px;
     color: white;
     text-shadow:
         0 0 10px rgb(131, 7, 255),
         0 0 20px rgb(131, 7, 255),
         0 0 40px rgb(131, 7, 255),
-        0 0 80px rgb(131, 7, 255), 
-        0 0 120px rgb(131, 7, 255); 
+        0 0 80px rgb(131, 7, 255),
+        0 0 120px rgb(131, 7, 255);
+}
+
+.ver-salas{
+    font-weight: bold;
+    font-size: 22px;
+    margin-left: 20px;
+    color: white;
+    cursor: pointer;
+    text-shadow:
+        0 0 10px rgb(131, 7, 255),
+        0 0 20px rgb(131, 7, 255),
+        0 0 40px rgb(131, 7, 255),
+        0 0 80px rgb(131, 7, 255),
+        0 0 120px rgb(131, 7, 255);
 }
 
 .div-messages {
@@ -64,14 +84,16 @@
     height: 70vh;
     display: flex;
     flex-direction: column;
-    scroll-behavior: smooth; /* Adiciona uma transição suave */
-    overflow-y: auto; /* Habilita a barra de rolagem vertical */
+    scroll-behavior: smooth;
+    /* Adiciona uma transição suave */
+    overflow-y: auto;
+    /* Habilita a barra de rolagem vertical */
 
 }
 
 .form-message {
     background-color: black;
-    width: 77%;
+    width: 100%;
     height: 15%;
     display: flex;
     align-items: center;
@@ -89,7 +111,7 @@
 }
 
 .form-message input {
-    width: 75%;
+    width: 55%;
 }
 
 
@@ -111,24 +133,24 @@
     word-wrap: break-word;
 }
 
-.div-msg > .nickname-label {
+.div-msg>.nickname-label {
     align-self: flex-start;
     text-shadow:
         0 0 20px rgb(131, 7, 255),
         0 0 30px rgb(131, 7, 255),
         0 0 60px rgb(131, 7, 255),
-        0 0 90px rgb(131, 7, 255), 
-        0 0 150px rgb(131, 7, 255); 
+        0 0 90px rgb(131, 7, 255),
+        0 0 150px rgb(131, 7, 255);
 }
 
-.div-msg > .p-message {
+.div-msg>.p-message {
     background-color: rgb(55, 0, 111);
     color: white;
     text-align: center;
     padding: 10px;
     border-radius: 10px;
     max-width: 150px;
-    
+
 }
 
 .nickname-label {
@@ -140,8 +162,8 @@
         0 0 20px rgb(131, 7, 255),
         0 0 30px rgb(131, 7, 255),
         0 0 60px rgb(131, 7, 255),
-        0 0 90px rgb(131, 7, 255), 
-        0 0 150px rgb(131, 7, 255); 
+        0 0 90px rgb(131, 7, 255),
+        0 0 150px rgb(131, 7, 255);
 }
 
 .p-message {
@@ -155,9 +177,9 @@
         0 0 20px rgb(131, 7, 255),
         0 0 30px rgb(131, 7, 255),
         0 0 60px rgb(131, 7, 255),
-        0 0 90px rgb(131, 7, 255), 
-        0 0 150px rgb(131, 7, 255); 
-    
+        0 0 90px rgb(131, 7, 255),
+        0 0 150px rgb(131, 7, 255);
+
 }
 
 .no-messages {
@@ -180,19 +202,27 @@
         0 0 20px rgb(131, 7, 255),
         0 0 30px rgb(131, 7, 255),
         0 0 60px rgb(131, 7, 255),
-        0 0 90px rgb(131, 7, 255), 
-        0 0 150px rgb(131, 7, 255); 
+        0 0 90px rgb(131, 7, 255),
+        0 0 150px rgb(131, 7, 255);
 }
 
 .aside {
-    background-color: rgba(0, 0, 0, 0.356);
+    background-color: black;
     width: 30%;
     height: 100vh !important;
     border-right: 3px solid rgb(131, 7, 255);
     height: 100vh;
     overflow-y: auto;
+    position: absolute;
+    z-index: 2;
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
 }
 
+.aside-open {
+    transform: translateX(0);
+    transition: transform 0.5s ease;
+}
 
 .header-aside {
     background-color: black;
@@ -205,7 +235,13 @@
     border-bottom: solid 3px rgb(131, 7, 255);
 }
 
+.header-aside img {
+    justify-self: flex-end;
+    cursor: pointer;
+}
+
 .h1-aside {
+    margin-left: 30px;
     font-weight: bold;
     font-size: 22px;
     color: white;
@@ -213,8 +249,8 @@
         0 0 10px rgb(131, 7, 255),
         0 0 20px rgb(131, 7, 255),
         0 0 40px rgb(131, 7, 255),
-        0 0 80px rgb(131, 7, 255), 
-        0 0 120px rgb(131, 7, 255); 
+        0 0 80px rgb(131, 7, 255),
+        0 0 120px rgb(131, 7, 255);
 }
 
 .header-aside button {
@@ -229,13 +265,15 @@
     outline: none;
     cursor: pointer;
     box-shadow: 0px 0px 10px 5px rgba(131, 7, 255, 0.552);
-    
+    justify-self: flex-end;
+    margin-left: 120px;
+
 }
 
-  .header-aside button:active {
+.header-aside button:active {
     background-color: white;
     color: blueviolet;
-  }
+}
 
 .room-selected {
     background-color: rgb(131, 7, 255);
@@ -245,38 +283,38 @@
 
 .btn:hover {
     transform: scale(1);
-  }
-  
-  .btn:active {
+}
+
+.btn:active {
     transform: scale(0.5)
-  }
+}
 
 /* Estilizando a barra de rolagem */
 ::-webkit-scrollbar {
-    width: 7px; /* Largura da barra de rolagem */
-    border-radius: 5px; /* Raio da borda */
+    width: 7px;
+    /* Largura da barra de rolagem */
+    border-radius: 5px;
+    /* Raio da borda */
 }
 
 /* Estilizando o trilho da barra de rolagem */
 ::-webkit-scrollbar-track {
-    background-color: transparent; /* Cor de fundo do trilho */
-    border-radius: 5px; /* Raio da borda */
+    background-color: transparent;
+    /* Cor de fundo do trilho */
+    border-radius: 5px;
+    /* Raio da borda */
 }
 
 /* Estilizando o polegar da barra de rolagem */
 ::-webkit-scrollbar-thumb {
-    background-color: blueviolet; /* Cor de fundo do polegar */
-    border-radius: 5px; /* Raio da borda */
+    background-color: blueviolet;
+    /* Cor de fundo do polegar */
+    border-radius: 5px;
+    /* Raio da borda */
 }
 
 /* Mudando a cor do polegar ao passar o mouse */
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgb(95, 8, 176); /* Nova cor de fundo do polegar ao passar o mouse */
-}
-
-.box-red {
-    width: 100px;
-    height: 100px;
-    background-color: red;
-    border: solid yellow 2px;
+    background-color: rgb(95, 8, 176);
+    /* Nova cor de fundo do polegar ao passar o mouse */
 }
