@@ -18,6 +18,19 @@ import './style.css'
 
 export default function Room() {
 
+    const socket = io('http://localhost:3000');
+
+    // socket.on("connect_error", (err) => {
+    //     // the reason of the error, for example "xhr poll error"
+    //     console.log(err.message);
+      
+    //     // some additional description, for example the status code of the initial HTTP response
+    //     console.log(err.description);
+      
+    //     // some additional context, for example the XMLHttpRequest object
+    //     console.log(err.context);
+    // });
+
     const [visivel, setVisivel] = useState(false);
     const [localStream, setLocalStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
@@ -32,13 +45,12 @@ export default function Room() {
         setRemoteStream,
         localVideoRef,
         remoteVideoRef,
-        peerConnection
+        peerConnection,
+        socket
     };
 
     // Navegação de salas
     const navigate = useNavigate();
-
-    const socket = io('http://localhost:3333');
 
     const mensagensRef = useRef(null);
 
@@ -63,6 +75,7 @@ export default function Room() {
     verificacaoSala(sala, rooms);
 
     useEffect(() => {
+        console.log(socket)
         socket.emit('criarSala', stateRoom);
 
         setMensagens(() => {
@@ -99,7 +112,7 @@ export default function Room() {
                         </div>
 
                         <div className='div-options'>
-                            <button onClick={async () => {
+                            <button className='start-video' onClick={async () => {
 
                                 iniciarChamada(config)
                                 setVisivel(true)

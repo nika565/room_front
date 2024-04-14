@@ -335,6 +335,10 @@
     background-color: green;
 }
 
+.start-video {
+    display: none;
+}
+
 .btn-encerrar-stream {
     margin-top: 50px;
 }

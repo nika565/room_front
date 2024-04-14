@@ -3,7 +3,7 @@ import idGenerator from "./idGenerator";
 
 export default function createRoom(nickname, nameRoom) {
 
-  const socket = io('http://localhost:3333');
+  const socket = io('http://localhost:3000');
 
   // Verificação do tamanho dos nomes
   if (nickname.length > 12) {
