@@ -1,5 +1,3 @@
-# Room (Back-end)
-
 # Visão Geral:
 
 “Room” é uma aplicação web simples que oferece um serviço de chat em tempo real. Este projeto foi desenvolvido como um caso de estudo proposto por mim mesmo, com o objetivo de explorar especificamente websockets, uma tecnologia que conecta clientes e servidores e torna possível a comunicação em tempo real.
