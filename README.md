@@ -26,15 +26,11 @@ Navegue até os repositórios do projeto:
 
 Na página de exibição do projeto, clique no botão escrito “code” e copie a url fornecida.
 
-![clone_repository.png](Room%20(Back-end)%20ca55dc5d9cf14416b2432e0a7fcb8bfa/clone_repository.png)
-
 Após isso, navegue até uma pasta específica e abra um terminal (prompt de comando no windows) dentro da pasta que você escolheu e digite:
 
 ```bash
 git clone (Cole aqui o link que você copiou no github)
 ```
-
-![paste_terminal.png](Room%20(Back-end)%20ca55dc5d9cf14416b2432e0a7fcb8bfa/paste_terminal.png)
 
 após isso, entre dentro da pasta do projeto e digite:
 
@@ -50,11 +46,7 @@ Após a instalação dos pacotes, digite o seguinte comando para iniciar a aplic
 npm run dev
 ```
 
-Ao executar o front-end você verá uma URL como representado na foto abaixo:
-
-![tutorial_room.png](Room%20(Back-end)%20ca55dc5d9cf14416b2432e0a7fcb8bfa/tutorial_room.png)
-
-Copie essa URL e cole na barra de pesquisa do navegador.
+Ao executar o front-end você verá uma URL no terminal, basta copiar esta URL e colar a barra de pesquisa do navegador
 
 **Observação: Lembre-se de executar o back-end antes de abrir a aplicação front-end no navegador para não apresentar erros indesejados.**
 
